@@ -1,0 +1,28 @@
+package com.example.tasks_app.data
+
+import com.example.tasks_app.network.TaskApiService
+import retrofit2.Retrofit
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+
+interface AppContainer {
+    val tasksRepository: TasksRepository
+}
+
+class DefaultAppContainer : AppContainer {
+    private val baseUrl = "http://10.0.2.2:8080/"
+
+    private val retrofit = Retrofit.Builder()
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .baseUrl(baseUrl)
+        .build()
+
+    private val retrofitService: TaskApiService by lazy {
+        retrofit.create(TaskApiService::class.java)
+    }
+
+    override val tasksRepository: TasksRepository by lazy {
+        NetworkTasksRepository(retrofitService)
+    }
+}
