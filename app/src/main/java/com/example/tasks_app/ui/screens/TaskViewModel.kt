@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope // Import for viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.tasks_app.TaskApplication
-import com.example.tasks_app.data.TasksRepository
+import com.example.tasks_app.data.TaskRepository
 import com.example.tasks_app.model.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +22,7 @@ sealed interface TaskUiState {
     object Loading : TaskUiState
 }
 
-class TaskViewModel(private val taskRepository: TasksRepository) : ViewModel() {
+class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
 
     private val _taskUiState = MutableStateFlow<TaskUiState>(TaskUiState.Loading)
 
@@ -35,7 +35,7 @@ class TaskViewModel(private val taskRepository: TasksRepository) : ViewModel() {
         viewModelScope.launch {
             _taskUiState.value = TaskUiState.Loading
             _taskUiState.value = try {
-                TaskUiState.Success(taskRepository.fetchTasks())
+                TaskUiState.Success(taskRepository.getAllTasks())
             } catch (e: Exception) {
                 TaskUiState.Error
             }
@@ -46,8 +46,8 @@ class TaskViewModel(private val taskRepository: TasksRepository) : ViewModel() {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as TaskApplication)
-                val tasksRepository = application.container.tasksRepository
-                TaskViewModel(taskRepository = tasksRepository)
+                val taskRepository = application.container.taskRepository
+                TaskViewModel(taskRepository = taskRepository)
             }
         }
     }
