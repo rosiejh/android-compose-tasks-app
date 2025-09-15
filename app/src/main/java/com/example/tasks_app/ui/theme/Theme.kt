@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
-import okhttp3.internal.connection.RouteDatabase
 
 // https://developer.android.com/codelabs/basic-android-kotlin-compose-material-theming#1
 
@@ -65,6 +64,7 @@ fun TaskAppTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
+
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }

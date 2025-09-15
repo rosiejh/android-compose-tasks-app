@@ -52,6 +52,7 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
         getAllTasks()
 //        getSingleTask("cleaning")
     }
+
     fun getAllTasks() {
         println("In taskViewModel.getAllTasks before launch")
         viewModelScope.launch {
