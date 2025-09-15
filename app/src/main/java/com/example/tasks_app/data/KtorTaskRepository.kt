@@ -19,12 +19,12 @@ class KtorTaskRepository(val httpClient: HttpClient, val baseUrl: String) : Task
     }
 
     override suspend fun getTaskByName(name: String): Task? {
-        val url = "${baseUrl}/by-name/${name}"
+        val url = "${baseUrl}/tasks/by-name/${name}"
         return httpClient.get(url).body()
     }
 
     override suspend fun getTasksByPriority(priority: String): List<Task> {
-        val url = "${baseUrl}/by-priority/${priority}"
+        val url = "${baseUrl}/tasks/by-priority/${priority}"
         return httpClient.get(url).body()
     }
 
@@ -36,9 +36,9 @@ class KtorTaskRepository(val httpClient: HttpClient, val baseUrl: String) : Task
         }
     }
 
+    // TODO use same URL as getTaskByName
     override suspend fun deleteTask(task: Task) {
-        val url = "${baseUrl}/delete-task/${task.name}"
+        val url = "${baseUrl}/tasks/delete-task/${task.name}"
         httpClient.delete(url)
     }
-
 }

@@ -1,6 +1,5 @@
 package com.example.tasks_app.ui.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,40 +9,36 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.example.tasks_app.model.Task
-import java.util.Locale
+import com.example.tasks_app.ui.TasksApp
+import com.example.tasks_app.ui.screens.components.MiniTaskCard
+import com.example.tasks_app.ui.theme.TaskAppTheme
 
 @Composable
 fun AllTasksScreen(
-    taskUiState: TaskUiState,
+    taskUiState: AllTasksUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
+    onTaskClick: (String) -> Unit
 ) {
     when (taskUiState) {
-        is TaskUiState.Loading -> LoadingScreen(
+        is AllTasksUiState.Loading -> LoadingScreen(
             modifier = modifier.fillMaxSize()
         )
-        is TaskUiState.Success -> TasksListScreen(
+        is AllTasksUiState.Success -> TasksListScreen(
             tasks = taskUiState.tasks,
-
-            modifier = modifier.fillMaxWidth()
+            onTaskClick = onTaskClick,
+            modifier = modifier.fillMaxWidth(),
         )
-        is TaskUiState.Error -> ErrorScreen(
+//        is AllTasksUiState.Success -> FillerScreen(modifier = modifier.fillMaxSize())
+        is AllTasksUiState.Error -> AllTasksErrorScreen (
             retryAction = retryAction,
             modifier = modifier.fillMaxSize(),
         )
@@ -51,22 +46,9 @@ fun AllTasksScreen(
 }
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Surface {
-        Text(text = "Loading...")
-    }
-}
-
-@Composable
-fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier) {
-    Surface {
-        Text(text = "Error")
-    }
-}
-
-@Composable
 fun TasksListScreen(
     tasks: List<Task>,
+    onTaskClick: (taskName: String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     ) {
@@ -76,44 +58,16 @@ fun TasksListScreen(
         contentPadding = contentPadding,
     ) {
         items(items = tasks, key = { task -> task.name }) { task ->
-            TaskCard(
+            MiniTaskCard(
                 task = task,
+                onTaskClick = { onTaskClick(task.name)},
                 modifier = Modifier
                     .padding(4.dp)
                     .fillMaxWidth()
             )
         }
     }
-
 }
-
-// https://medium.com/@acceldia/jetpack-compose-creating-expandable-cards-with-content-9ea1eae09efe
-@Composable
-fun TaskCard(task: Task, modifier: Modifier) {
-    var expanded by remember { mutableStateOf(false) }
-    Card(
-        modifier = modifier.clickable(onClick = { expanded = !expanded }).padding(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        Text(
-            text = task.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
-            modifier = Modifier.padding(8.dp, 8.dp, 8.dp),
-            style = MaterialTheme.typography.titleLarge)
-        Text(
-            text = task.priority,
-            modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-            color = MaterialTheme.colorScheme.tertiary
-        )
-
-        if (expanded) {
-            Text(
-                text = task.description,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-    }
-}
-
 
 @Composable
 fun NewTaskButton(onClick: () -> Unit) {
@@ -124,3 +78,55 @@ fun NewTaskButton(onClick: () -> Unit) {
     }
 }
 
+
+// https://developer.android.com/develop/ui/compose/tooling/previews
+class TasksPreviewParameterProvider : PreviewParameterProvider<List<Task>> {
+    override val values = sequenceOf(
+        listOf(Task("Sample Task 1", "Low", "This is a sample task"),
+        Task("Sample Task 2", "High", "This is another sample task"),
+        Task("Sample Task 3", "Medium", "Important third task"),
+        Task("Sample Task 4", "Low", "Test Task 4, very nice"),
+        Task("Sample Task 5", "Critical", "Number 5 Task"))
+    )
+}
+
+// Idea: Make a Preview for the ViewModel
+// Then pass this as a parameter
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun TasksLightThemePreview(
+//    @PreviewParameter(TasksPreviewParameterProvider::class) tasks: List<Task>
+//) {
+//    AllTasksScreen(
+//        taskUiState = AllTasksUiState.Success(tasks),
+//        retryAction = {},
+//        modifier = Modifier.fillMaxSize(),
+//        onTaskClick,
+//    )
+//}
+
+
+//@Preview(showBackground = true)
+//@Composable
+//fun TasksLightThemePreview(
+//    @PreviewParameter(TasksPreviewParameterProvider::class) tasks: List<Task>
+//) {
+//    TaskAppTheme(darkTheme = false) {
+//        TasksApp() {
+//            AllTasksScreen(
+//                taskUiState = TaskUiState.Success(tasks),
+//                retryAction = {},
+//                modifier = Modifier.fillMaxSize()
+//            )
+//        }
+//    }
+//}
+
+@Preview
+@Composable
+fun TasksDarkThemePreview() {
+    TaskAppTheme(darkTheme = true) {
+        TasksApp()
+    }
+}

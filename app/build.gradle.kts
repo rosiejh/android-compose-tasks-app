@@ -45,15 +45,14 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
-//    implementation(libs.ui.tooling.preview)
 //    // Optional - Included automatically by material, only add when you need
 //    // the icons but not the material library (e.g. when using Material3 or a
 //    // custom design system based on Foundation)
-//    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.core)
 //    // Optional - Add full set of material icons
-//    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.material.icons.extended)
 //    // Optional - Add window size utils
-//    implementation(libs.androidx.compose.adaptive)
+    implementation(libs.androidx.compose.adaptive)
 //
     // Optional - Integration with activities
     implementation(libs.androidx.activity.compose)
@@ -79,7 +78,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converterKotlinxSerialization)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
