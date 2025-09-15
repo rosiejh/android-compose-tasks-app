@@ -25,13 +25,16 @@ fun MiniTaskCard(
 ) {
     var expanded by remember { mutableStateOf(false) }
     Card(
-        modifier = modifier.padding(8.dp).clickable(onClick = onTaskClick),
+        modifier = modifier
+            .padding(8.dp)
+            .clickable(onClick = onTaskClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Text(
             text = task.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
             modifier = Modifier.padding(8.dp, 8.dp, 8.dp),
-            style = MaterialTheme.typography.titleLarge)
+            style = MaterialTheme.typography.titleLarge
+        )
         Text(
             text = task.priority,
             modifier = Modifier.padding(start = 8.dp, end = 8.dp),

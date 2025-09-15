@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -78,8 +78,7 @@ fun TasksApp() {
                 }
             )
         }
-    ) {
-        innerPadding ->
+    ) { innerPadding ->
         AppNavigation(
             navController = navController,
             viewModel = taskViewModel,
@@ -126,7 +125,7 @@ fun AppNavigation(
 
             SingleTaskScreen(
                 taskUiState = singleTaskUiState,
-                retryAction = { viewModel.getSingleTask(taskName)  },
+                retryAction = { viewModel.getSingleTask(taskName) },
                 modifier = Modifier.fillMaxSize(),
             )
         }

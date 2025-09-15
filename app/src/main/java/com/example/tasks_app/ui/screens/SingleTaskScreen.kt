@@ -20,15 +20,19 @@ fun SingleTaskScreen(
         is SingleTaskUiState.Loading -> LoadingScreen(
             modifier = modifier.fillMaxSize()
         )
+
         is SingleTaskUiState.Success -> TaskScreen(
             task = taskUiState.task,
-            modifier = modifier.fillMaxWidth().padding(8.dp)
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp)
         )
+
         is SingleTaskUiState.Error ->
             SingleTaskErrorScreen(
                 modifier = modifier.fillMaxSize(),
                 retryAction = retryAction,
-        )
+            )
     }
 }
 

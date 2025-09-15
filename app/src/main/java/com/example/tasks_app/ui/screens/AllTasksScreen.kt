@@ -32,13 +32,14 @@ fun AllTasksScreen(
         is AllTasksUiState.Loading -> LoadingScreen(
             modifier = modifier.fillMaxSize()
         )
+
         is AllTasksUiState.Success -> TasksListScreen(
             tasks = taskUiState.tasks,
             onTaskClick = onTaskClick,
             modifier = modifier.fillMaxWidth(),
         )
 //        is AllTasksUiState.Success -> FillerScreen(modifier = modifier.fillMaxSize())
-        is AllTasksUiState.Error -> AllTasksErrorScreen (
+        is AllTasksUiState.Error -> AllTasksErrorScreen(
             retryAction = retryAction,
             modifier = modifier.fillMaxSize(),
         )
@@ -51,7 +52,7 @@ fun TasksListScreen(
     onTaskClick: (taskName: String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    ) {
+) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(150.dp),
         modifier = modifier.padding(horizontal = 4.dp),
@@ -60,7 +61,7 @@ fun TasksListScreen(
         items(items = tasks, key = { task -> task.name }) { task ->
             MiniTaskCard(
                 task = task,
-                onTaskClick = { onTaskClick(task.name)},
+                onTaskClick = { onTaskClick(task.name) },
                 modifier = Modifier
                     .padding(4.dp)
                     .fillMaxWidth()
@@ -82,11 +83,13 @@ fun NewTaskButton(onClick: () -> Unit) {
 // https://developer.android.com/develop/ui/compose/tooling/previews
 class TasksPreviewParameterProvider : PreviewParameterProvider<List<Task>> {
     override val values = sequenceOf(
-        listOf(Task("Sample Task 1", "Low", "This is a sample task"),
-        Task("Sample Task 2", "High", "This is another sample task"),
-        Task("Sample Task 3", "Medium", "Important third task"),
-        Task("Sample Task 4", "Low", "Test Task 4, very nice"),
-        Task("Sample Task 5", "Critical", "Number 5 Task"))
+        listOf(
+            Task("Sample Task 1", "Low", "This is a sample task"),
+            Task("Sample Task 2", "High", "This is another sample task"),
+            Task("Sample Task 3", "Medium", "Important third task"),
+            Task("Sample Task 4", "Low", "Test Task 4, very nice"),
+            Task("Sample Task 5", "Critical", "Number 5 Task")
+        )
     )
 }
 
